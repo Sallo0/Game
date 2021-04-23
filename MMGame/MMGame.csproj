@@ -2,8 +2,19 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="image\Background.png" />
+      <Resource Include="image\Background.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\Player.png" />
+      <Resource Include="image\Player.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
 
 </Project>

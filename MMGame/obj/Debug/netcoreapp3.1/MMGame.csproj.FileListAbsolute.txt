@@ -13,3 +13,4 @@ C:\Users\Simik\RiderProjects\MMGame\MMGame\obj\Debug\netcoreapp3.1\MMGame.pdb
 C:\Users\Simik\RiderProjects\MMGame\MMGame\obj\Debug\netcoreapp3.1\MMGame.genruntimeconfig.cache
 C:\Users\Simik\RiderProjects\MMGame\MMGame\obj\Debug\netcoreapp3.1\MMGame.csproj.GenerateResource.cache
 C:\Users\Simik\RiderProjects\MMGame\MMGame\obj\Debug\netcoreapp3.1\MMGame.Form1.resources
+C:\Users\Simik\RiderProjects\MMGame\MMGame\obj\Debug\netcoreapp3.1\MMGame.g.resources

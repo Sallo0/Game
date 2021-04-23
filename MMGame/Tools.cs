@@ -9,9 +9,9 @@ namespace MMGame
     {
         public static string GetFullPath(string fileName)
         {
-            return String.Join('\\',Path.GetFullPath(fileName)
-                .Split('\\')
-                .TakeWhile(e => e!="bin"))+"\\image\\"+fileName;
+            return (String.Join("\\",
+                Path.GetFullPath(fileName).Split("\\")
+                .TakeWhile(e => e!="bin"))+"\\image\\"+fileName).Replace("\\\\","\\");
         }
     }
 }

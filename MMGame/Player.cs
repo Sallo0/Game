@@ -7,17 +7,20 @@ namespace MMGame
         public int x;
         public int y;
         public Image PlayerImage;
+        public Rectangle HitBox;
+        public int movementSpeed = 30;
+        public bool IsAlive = true;
 
         public Player(int x, int y)
         {
             PlayerImage = new Bitmap(Tools.GetFullPath("Player.png"));
             this.x = x;
             this.y = y;
+            HitBox = new Rectangle(x+20, y+ PlayerImage.Height/10*9, PlayerImage.Width/2, PlayerImage.Height/10);
         }
 
         public void Move(string dir,int width, int height, int floorImgHeight)
         {
-            var movementSpeed = 20;
             switch (dir)
             {
                 case "Right":
@@ -37,6 +40,7 @@ namespace MMGame
                     else y = height - 10 - PlayerImage.Height;
                     break;
             }
+            HitBox = new Rectangle(x+20, y+ PlayerImage.Height/10*9, PlayerImage.Width/2, PlayerImage.Height/10);
         }
     }
 }
