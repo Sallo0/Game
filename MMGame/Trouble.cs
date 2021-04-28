@@ -16,12 +16,5 @@ namespace MMGame
             TroubleImage = troubleImage;
             HitBox = new Rectangle(x, y, TroubleImage.Width, TroubleImage.Height);
         }
-        
-
-        public void Incident(Player player)
-        {
-            if (HitBox.IntersectsWith(player.HitBox))
-                player.IsAlive = false;
-        }
     }
 }

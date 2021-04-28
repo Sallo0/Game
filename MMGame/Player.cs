@@ -42,5 +42,11 @@ namespace MMGame
             }
             HitBox = new Rectangle(x+20, y+ PlayerImage.Height/10*9, PlayerImage.Width/2, PlayerImage.Height/10);
         }
+        
+        public void Incident(Trouble trouble)
+        {
+            if (HitBox.IntersectsWith(trouble.HitBox))
+                IsAlive = false;
+        }
     }
 }

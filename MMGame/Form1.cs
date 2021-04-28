@@ -85,7 +85,7 @@ namespace MMGame
                 {
                     floorSpeed = 0;
                 }
-                foreach (var trouble in Troubles) trouble.Incident(player);
+                foreach (var trouble in Troubles) player.Incident(trouble);
             };
         }
     }
