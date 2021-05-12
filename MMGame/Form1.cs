@@ -13,14 +13,32 @@ namespace MMGame
 {
     public partial class Form1 : Form
     {
-        private List<Trouble> Troubles = new List<Trouble>();
-        Player player = new Player(200,300);
-        public static Bitmap backgImage = new Bitmap(Tools.GetFullPath("Background.png"));
-        public static Bitmap floorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
-        public static int width = 1500;
-        public static int height = floorImage.Height+backgImage.Height;
+        private List<Trouble> Troubles;
+        Player player;
+        public static Bitmap backgImage;
+        public static Bitmap floorImage;
+        public static Bitmap menuImage;
+        public static Bitmap playerDeadImage;
         public int xFloorCord;
-        public int floorSpeed = 1;
+        public int floorSpeed;
+        public static int width = 1500;
+        public static int height = 630;
+        public bool newGame = true;
+        public Rectangle startButtonBox = new Rectangle(new Point(656,494),new Size(197,81));
+
+
+        private void Init()
+        {
+            Troubles = new List<Trouble>();
+            player = new Player(200,300);
+            backgImage = new Bitmap(Tools.GetFullPath("Background.png"));
+            floorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
+            menuImage = new Bitmap(Tools.GetFullPath("Start.png"));
+            playerDeadImage = new Bitmap(Tools.GetFullPath("PlayerDead.png"));
+            xFloorCord = 0;
+            floorSpeed = 1;
+            InitTroubles();
+        }
         
 
         private void DrawBackground(Graphics graphics)
@@ -58,34 +76,63 @@ namespace MMGame
                 graphics.DrawImage(trouble.TroubleImage,trouble.x,trouble.y);
             }
         }
-
+        
         public Form1()
         {
             Load += (sender, args) =>
             {
                 DoubleBuffered = true;
-                ClientSize = new Size(width, height);   
-                InitTroubles();
+                ClientSize = new Size(width, height); 
+                FormBorderStyle = FormBorderStyle.None;
+                Init();
+            };
+            
+            MouseClick += (sender, args) =>
+            {
+                if (!player.IsAlive)
+                {
+                    newGame = true;
+                }
+            };
+            
+            MouseClick += (sender, args) =>
+            {
+                if (startButtonBox.Contains(args.Location) && newGame)
+                {
+                    Init();
+                    newGame = false;
+                }
             };
             
             Paint += (sender, args) =>
             {
                 var g = args.Graphics;
-                DrawBackground(g);
-                DrawTroubles(g);
-                g.DrawImage(player.PlayerImage, player.x, player.y);
-                g.DrawRectangle(new Pen(Color.Purple),player.HitBox);
+                
+                if (newGame)
+                {
+                    g.DrawImage(menuImage,0,0);
+                }
+                else
+                {
+                    if (player.IsAlive)
+                    {
+                        DrawBackground(g);
+                        DrawTroubles(g);
+                        g.DrawImage(player.PlayerImage, player.x, player.y);
+                        g.DrawRectangle(new Pen(Color.Purple), player.HitBox);
+                    }
+                    else
+                    {
+                        g.DrawImage(playerDeadImage, 0, 0);
+                    }
+                }
+                foreach (var trouble in Troubles) player.Incident(trouble);
                 Invalidate();
             };
-
+            
             KeyDown += (sender, args) =>
             {
                 if (player.IsAlive) player.Move(args.KeyCode.ToString(), width, height, floorImage.Height);
-                else
-                {
-                    floorSpeed = 0;
-                }
-                foreach (var trouble in Troubles) player.Incident(trouble);
             };
         }
     }
