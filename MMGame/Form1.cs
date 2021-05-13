@@ -24,7 +24,8 @@ namespace MMGame
         public static int width = 1500;
         public static int height = 630;
         public bool newGame = true;
-        public Rectangle startButtonBox = new Rectangle(new Point(656,494),new Size(197,81));
+        public Rectangle startButtonBox = new Rectangle(new Point(656,397),new Size(197,81));
+        public Rectangle exitButtonBox = new Rectangle(new Point(656,494),new Size(197,81));
 
 
         private void Init()
@@ -101,6 +102,11 @@ namespace MMGame
                 {
                     Init();
                     newGame = false;
+                }
+                
+                if (exitButtonBox.Contains(args.Location) && newGame)
+                {
+                    Application.Exit();
                 }
             };
             
