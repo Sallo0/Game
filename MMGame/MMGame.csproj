@@ -4,6 +4,8 @@
         <OutputType>WinExe</OutputType>
         <UseWindowsForms>true</UseWindowsForms>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>MMGame</RootNamespace>
+        <StartupObject>MMGame.Program</StartupObject>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
       <PackageReference Include="NUnit" Version="3.13.2" />
     </ItemGroup>
 
