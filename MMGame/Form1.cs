@@ -20,12 +20,14 @@ namespace MMGame
         public static Bitmap menuImage;
         public static Bitmap playerDeadImage;
         public static Image pauseImage;
+        public static Bitmap winGameImage;
         public int xFloorCord;
         public int floorSpeed;
         public const int width = 1500;
         public const int height = 630;
         public bool newGame = true;
         public bool pause = false;
+        public bool winGame = false;
         public Rectangle startButtonBox = new Rectangle(new Point(656,397),new Size(197,81));
         public Rectangle exitButtonBox = new Rectangle(new Point(656,494),new Size(197,81));
         public Rectangle pauseMenuButtonBox = new Rectangle(new Point(576, 370), new Size(162,64));
@@ -42,10 +44,12 @@ namespace MMGame
             menuImage = new Bitmap(Tools.GetFullPath("Start.png"));
             playerDeadImage = new Bitmap(Tools.GetFullPath("PlayerDead.png"));
             pauseImage = new Bitmap(Tools.GetFullPath("Pause.png"));
+            winGameImage = new Bitmap(Tools.GetFullPath("Win.png"));
             zet = new Zet(width,300);
             xFloorCord = 0;
             floorSpeed = 3;
             InitTroubles();
+            winGame = false;
         }
         
 
@@ -122,7 +126,7 @@ namespace MMGame
                     }
                 }
                 
-                if (!player.IsAlive)
+                if (!player.IsAlive || winGame)
                 {
                     newGame = true;
                 }
@@ -132,11 +136,17 @@ namespace MMGame
             Paint += (sender, args) =>
             {
                 var g = args.Graphics;
-                if (player.ZetCount == 5) newGame = true;
+                
                 if (newGame)
                 {
                     g.DrawImage(menuImage,0,0);
                 }
+                else if (player.ZetCount == 1)
+                {
+                    g.DrawImage(winGameImage,0,0);
+                    winGame = true;
+                }
+                
                 else
                 {
                     if (player.IsAlive)
