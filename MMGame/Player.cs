@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics.Contracts;
+using System.Drawing;
 
 namespace MMGame
 {
@@ -10,6 +11,7 @@ namespace MMGame
         public Rectangle HitBox;
         public int movementSpeed = 30;
         public bool IsAlive = true;
+        public int ZetCount;
 
         public Player(int x, int y)
         {

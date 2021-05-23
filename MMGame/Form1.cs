@@ -30,7 +30,8 @@ namespace MMGame
         public Rectangle exitButtonBox = new Rectangle(new Point(656,494),new Size(197,81));
         public Rectangle pauseMenuButtonBox = new Rectangle(new Point(576, 370), new Size(162,64));
         public Rectangle pauseContinueButtonBox = new Rectangle(new Point(753, 369), new Size(159,65));
-        
+        public Zet zet;
+        public Random Random = new Random();
 
         private void Init()
         {
@@ -41,8 +42,9 @@ namespace MMGame
             menuImage = new Bitmap(Tools.GetFullPath("Start.png"));
             playerDeadImage = new Bitmap(Tools.GetFullPath("PlayerDead.png"));
             pauseImage = new Bitmap(Tools.GetFullPath("Pause.png"));
+            zet = new Zet(width,300);
             xFloorCord = 0;
-            floorSpeed = 1;
+            floorSpeed = 3;
             InitTroubles();
         }
         
@@ -126,10 +128,11 @@ namespace MMGame
                 }
             };
             
+            
             Paint += (sender, args) =>
             {
                 var g = args.Graphics;
-                
+                if (player.ZetCount == 5) newGame = true;
                 if (newGame)
                 {
                     g.DrawImage(menuImage,0,0);
@@ -146,14 +149,22 @@ namespace MMGame
                         {
                             DrawBackground(g);
                             DrawTroubles(g);
+                            g.DrawImage(zet.ZetImage,zet.x,zet.y);
                             g.DrawImage(player.PlayerImage, player.x, player.y);
                             g.DrawRectangle(new Pen(Color.Purple), player.HitBox);
+                            g.DrawRectangle(new Pen(Color.Red), zet.HitBox);
                         }
                     }
                     else
                     {
                         g.DrawImage(playerDeadImage, 0, 0);
                     }
+                }
+                zet.X -= floorSpeed;
+                if (zet.Incident(player) || zet.HitBox.Right < 0)
+                {
+                    zet.X = width;
+                    zet.Y = Random.Next(backgImage.Height, height - zet.ZetImage.Height);
                 }
                 foreach (var trouble in Troubles) player.Incident(trouble);
                 Invalidate();
