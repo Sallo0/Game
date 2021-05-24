@@ -20,7 +20,7 @@ namespace MMGame
         public void IsHitboxesCorrect()
         {
             var player = new Player(0,0);
-            var trouble = new Trouble(0, 0, new Bitmap(Tools.GetFullPath("TroubleChair.png")));
+            var trouble = new TroubleChair(0, 0);
             Assert.AreEqual(false, player.HitBox.IntersectsWith(trouble.HitBox));
         }
     }

@@ -13,8 +13,8 @@ namespace MMGame
 {
     public partial class Form1 : Form
     {
-        private List<Trouble> Troubles;
         Player player;
+        public List<ITrouble> Troubles;
         public static Bitmap backgImage;
         public static Bitmap floorImage;
         public static Bitmap menuImage;
@@ -34,10 +34,11 @@ namespace MMGame
         public Rectangle pauseContinueButtonBox = new Rectangle(new Point(753, 369), new Size(159,65));
         public Zet zet;
         public Random Random = new Random();
+        public TroubleGenerator TGen = new TroubleGenerator();
 
         private void Init()
         {
-            Troubles = new List<Trouble>();
+            Troubles = TGen.RandomTroubles();
             player = new Player(200,300);
             backgImage = new Bitmap(Tools.GetFullPath("Background.png"));
             floorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
@@ -48,9 +49,9 @@ namespace MMGame
             zet = new Zet(width,300);
             xFloorCord = 0;
             floorSpeed = 3;
-            InitTroubles();
             winGame = false;
         }
+        
         
 
         private void DrawBackground(Graphics graphics)
@@ -66,26 +67,19 @@ namespace MMGame
             }
         }
 
-        private void InitTroubles()
+        private void GenerateTroubles()
         {
-            Troubles.Add(new Trouble(400,backgImage.Height, new Bitmap(Tools.GetFullPath("TroubleChair.png"))));
-            Troubles.Add(new Trouble(800,height-200, new Bitmap(Tools.GetFullPath("TroubleChair.png"))));
-            Troubles.Add(new Trouble(1200,backgImage.Height, new Bitmap(Tools.GetFullPath("TroubleChair.png"))));
-            Troubles.Add(new Trouble(1600,height-200, new Bitmap(Tools.GetFullPath("TroubleChair.png"))));
+            if (Troubles.Last().HitBox.Right < width) Troubles.AddRange(TGen.RandomTroubles());
+            if (Troubles.First().HitBox.Right < -10) Troubles.RemoveAt(0);
         }
-
+        
         private void DrawTroubles(Graphics graphics)
         {
             foreach (var trouble in Troubles)
             {
-                trouble.x -= floorSpeed;
-                if (trouble.x+trouble.TroubleImage.Width<=0)
-                {
-                    trouble.x = width;
-                }
-                trouble.HitBox.X = trouble.x;
+                trouble.X -= floorSpeed;
+                graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
                 graphics.DrawRectangle(new Pen(Color.Brown),trouble.HitBox);
-                graphics.DrawImage(trouble.TroubleImage,trouble.x,trouble.y);
             }
         }
         
@@ -136,7 +130,7 @@ namespace MMGame
             Paint += (sender, args) =>
             {
                 var g = args.Graphics;
-                
+               
                 if (newGame)
                 {
                     g.DrawImage(menuImage,0,0);
@@ -158,11 +152,12 @@ namespace MMGame
                         else
                         {
                             DrawBackground(g);
+                            GenerateTroubles();
                             DrawTroubles(g);
                             g.DrawImage(zet.ZetImage,zet.x,zet.y);
                             g.DrawImage(player.PlayerImage, player.x, player.y);
                             g.DrawRectangle(new Pen(Color.Purple), player.HitBox);
-                            g.DrawRectangle(new Pen(Color.Red), zet.HitBox);
+                            //g.DrawRectangle(new Pen(Color.Red), zet.HitBox);
                         }
                     }
                     else

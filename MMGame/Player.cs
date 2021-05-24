@@ -9,7 +9,7 @@ namespace MMGame
         public int y;
         public Image PlayerImage;
         public Rectangle HitBox;
-        public int movementSpeed = 30;
+        public int movementSpeed = 10;
         public bool IsAlive = true;
         public int ZetCount;
 
@@ -18,7 +18,7 @@ namespace MMGame
             PlayerImage = new Bitmap(Tools.GetFullPath("Player.png"));
             this.x = x;
             this.y = y;
-            HitBox = new Rectangle(x+20, y+ PlayerImage.Height/10*9, PlayerImage.Width/2, PlayerImage.Height/10);
+            HitBox = new Rectangle(x+20, y+ PlayerImage.Height/20*19, PlayerImage.Width/2, PlayerImage.Height/20);
         }
 
         public void Move(string dir,int width, int height, int floorImgHeight)
@@ -42,10 +42,10 @@ namespace MMGame
                     else y = height - 10 - PlayerImage.Height;
                     break;
             }
-            HitBox = new Rectangle(x+20, y+ PlayerImage.Height/10*9, PlayerImage.Width/2, PlayerImage.Height/10);
+            HitBox = new Rectangle(x+20, y+ PlayerImage.Height/20*19, PlayerImage.Width/2, PlayerImage.Height/20);
         }
         
-        public void Incident(Trouble trouble)
+        public void Incident(ITrouble trouble)
         {
             if (HitBox.IntersectsWith(trouble.HitBox))
                 IsAlive = false;
