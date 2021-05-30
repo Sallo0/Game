@@ -13,7 +13,8 @@ namespace MMGame
             set
             {
                 x = value;
-                HitBox.X = value;
+                ImageRect.X = value;
+                HitBox.X = value + 30;
             }
         }
 
@@ -23,18 +24,21 @@ namespace MMGame
             set
             {
                 y = value;
-                HitBox.Y = value + ZetImage.Height - 10;
+                ImageRect.Y = value;
+                HitBox.Y = value + ZetImage.Height - 25;
             }
         }
 
         public Image ZetImage = new Bitmap(Tools.GetFullPath("Zet.png"));
         public Rectangle HitBox;
+        public Rectangle ImageRect;
 
         public Zet(int x, int y)
         {
             this.x = x;
             this.y = y;
-            HitBox = new Rectangle(x, y + ZetImage.Height - 10, ZetImage.Width, 10);
+            HitBox = new Rectangle(x, y + ZetImage.Height - 25, 30, 20);
+            ImageRect = new Rectangle(x, y, ZetImage.Height, ZetImage.Width);
         }
 
         public bool Incident(Player player)

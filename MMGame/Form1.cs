@@ -17,6 +17,8 @@ namespace MMGame
         public List<ITrouble> Troubles;
         public static Bitmap backgImage;
         public static Bitmap floorImage;
+        public static Bitmap backgImage2;
+        public static Bitmap floorImage2;
         public static Bitmap menuImage;
         public static Bitmap playerDeadImage;
         public static Image pauseImage;
@@ -35,6 +37,7 @@ namespace MMGame
         public Zet zet;
         public Random Random = new Random();
         public TroubleGenerator TGen = new TroubleGenerator();
+        public int winZetAmount;
 
         private void Init()
         {
@@ -42,35 +45,52 @@ namespace MMGame
             player = new Player(200,300);
             backgImage = new Bitmap(Tools.GetFullPath("Background.png"));
             floorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
+            backgImage2 = new Bitmap(Tools.GetFullPath("Background2.png"));
+            floorImage2 = new Bitmap(Tools.GetFullPath("Floor2.png"));
             menuImage = new Bitmap(Tools.GetFullPath("Start.png"));
             playerDeadImage = new Bitmap(Tools.GetFullPath("PlayerDead.png"));
             pauseImage = new Bitmap(Tools.GetFullPath("Pause.png"));
             winGameImage = new Bitmap(Tools.GetFullPath("Win.png"));
-            zet = new Zet(width,300);
+            zet = new Zet(500,400);
             xFloorCord = 0;
             floorSpeed = 3;
             winGame = false;
+            winZetAmount = 5;
         }
         
-        
-
         private void DrawBackground(Graphics graphics)
         {
             xFloorCord = xFloorCord % backgImage.Width-floorSpeed;
-            for (var i = 0; i < width/backgImage.Width+1; i++)
-            {
-                graphics.DrawImage(backgImage,xFloorCord-backgImage.Width,0);
-                graphics.DrawImage(backgImage,xFloorCord,0);
-                graphics.DrawImage(floorImage,xFloorCord-backgImage.Width,backgImage.Height);
-                graphics.DrawImage(floorImage,xFloorCord,backgImage.Height);
-                xFloorCord += backgImage.Width;
-            }
+            graphics.DrawImage(backgImage,xFloorCord-backgImage.Width,0);
+            graphics.DrawImage(backgImage2,xFloorCord,0);
+            graphics.DrawImage(floorImage,xFloorCord-backgImage.Width,backgImage.Height);
+            graphics.DrawImage(floorImage2,xFloorCord,backgImage.Height);
+            xFloorCord += backgImage.Width;
         }
 
         private void GenerateTroubles()
         {
-            if (Troubles.Last().HitBox.Right < width) Troubles.AddRange(TGen.RandomTroubles());
+            if (Troubles.Last().HitBox.Right < width-100) Troubles.AddRange(TGen.RandomTroubles());
             if (Troubles.First().HitBox.Right < -10) Troubles.RemoveAt(0);
+        }
+
+        private void GenerateZet()
+        {
+            zet.X -= floorSpeed;
+            if (zet.Incident(player) || zet.HitBox.Right < 0)
+            {
+                zet.X = width + Random.Next(100,4000);
+                zet.Y = Random.Next(backgImage.Height, height - zet.ZetImage.Height);
+            }
+
+            foreach (var trouble in Troubles)
+            {
+                if (zet.ImageRect.IntersectsWith(trouble.ImageRect))
+                {
+                    zet.X = width;
+                    zet.Y = Random.Next(backgImage.Height, height - zet.ZetImage.Height);
+                }
+            }
         }
         
         private void DrawTroubles(Graphics graphics)
@@ -79,10 +99,37 @@ namespace MMGame
             {
                 trouble.X -= floorSpeed;
                 graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
-                graphics.DrawRectangle(new Pen(Color.Brown),trouble.HitBox);
+                //graphics.DrawRectangle(new Pen(Color.Brown),trouble.HitBox);
+                if (!player.imageRect.IntersectsWith(trouble.ImageRect) ||
+                    player.HitBox.Top <= trouble.HitBox.Top) continue;
+                graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
+                graphics.DrawImage(player.PlayerImage,player.x,player.y);
             }
         }
-        
+
+        private void DrawPause(Graphics graphics)
+        {
+            xFloorCord = xFloorCord % backgImage.Width;
+            graphics.DrawImage(backgImage,xFloorCord-backgImage.Width,0);
+            graphics.DrawImage(backgImage2,xFloorCord,0);
+            graphics.DrawImage(floorImage,xFloorCord-backgImage.Width,backgImage.Height);
+            graphics.DrawImage(floorImage2,xFloorCord,backgImage.Height);
+            xFloorCord += backgImage.Width;
+            
+            graphics.DrawImage(zet.ZetImage,zet.x,zet.y);
+            graphics.DrawImage(player.PlayerImage, player.x, player.y);
+            foreach (var trouble in Troubles)
+            {
+                graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
+                if (player.imageRect.IntersectsWith(trouble.ImageRect) && player.HitBox.Top > trouble.HitBox.Top)
+                {
+                    graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
+                    graphics.DrawImage(player.PlayerImage,player.x,player.y);
+                }
+            }
+            graphics.DrawImage(pauseImage,0,0);
+        }
+
         public Form1()
         {
             Load += (sender, args) =>
@@ -126,50 +173,40 @@ namespace MMGame
                 }
             };
             
-            
             Paint += (sender, args) =>
             {
                 var g = args.Graphics;
-               
                 if (newGame)
                 {
                     g.DrawImage(menuImage,0,0);
                 }
-                else if (player.ZetCount == 1)
+                else if (player.ZetCount == winZetAmount)
                 {
                     g.DrawImage(winGameImage,0,0);
                     winGame = true;
                 }
-                
                 else
                 {
                     if (player.IsAlive)
                     {
                         if (pause)
                         {
-                            g.DrawImage(pauseImage,0,0);
+                            DrawPause(g);
                         }
                         else
                         {
                             DrawBackground(g);
                             GenerateTroubles();
-                            DrawTroubles(g);
+                            GenerateZet();
                             g.DrawImage(zet.ZetImage,zet.x,zet.y);
                             g.DrawImage(player.PlayerImage, player.x, player.y);
-                            g.DrawRectangle(new Pen(Color.Purple), player.HitBox);
-                            //g.DrawRectangle(new Pen(Color.Red), zet.HitBox);
+                            DrawTroubles(g);
                         }
                     }
                     else
                     {
                         g.DrawImage(playerDeadImage, 0, 0);
                     }
-                }
-                zet.X -= floorSpeed;
-                if (zet.Incident(player) || zet.HitBox.Right < 0)
-                {
-                    zet.X = width;
-                    zet.Y = Random.Next(backgImage.Height, height - zet.ZetImage.Height);
                 }
                 foreach (var trouble in Troubles) player.Incident(trouble);
                 Invalidate();
@@ -181,7 +218,7 @@ namespace MMGame
                 {
                     pause = !pause;
                 }
-                if (player.IsAlive) player.Move(args.KeyCode.ToString(), width, height, floorImage.Height);
+                if (player.IsAlive && !pause) player.Move(args.KeyCode.ToString(), width, height, floorImage.Height);
             };
         }
     }
