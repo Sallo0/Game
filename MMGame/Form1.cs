@@ -23,6 +23,7 @@ namespace MMGame
         public static Bitmap playerDeadImage;
         public static Image pauseImage;
         public static Bitmap winGameImage;
+        public static Bitmap zetCountImage;
         public int xFloorCord;
         public int floorSpeed;
         public const int width = 1500;
@@ -55,10 +56,20 @@ namespace MMGame
             playerDeadImage = new Bitmap(Tools.GetFullPath("PlayerDead.png"));
             pauseImage = new Bitmap(Tools.GetFullPath("Pause.png"));
             winGameImage = new Bitmap(Tools.GetFullPath("Win.png"));
+            zetCountImage = new Bitmap(Tools.GetFullPath("ZetCount.png"));
             zet = new Zet(500,400);
             xFloorCord = 0;
             floorSpeed = 3;
             winGame = false;
+        }
+
+        private void DrawZetCount(Graphics graphics)
+        {
+            for (var i = 0; i < player.ZetCount; i++)
+            {
+                zetCountImage.MakeTransparent(Color.White);
+                graphics.DrawImage(zetCountImage,i*zetCountImage.Width,0);
+            }
         }
         
         private void DrawBackground(Graphics graphics)
@@ -118,7 +129,7 @@ namespace MMGame
             graphics.DrawImage(floorImage,xFloorCord-backgImage.Width,backgImage.Height);
             graphics.DrawImage(floorImage2,xFloorCord,backgImage.Height);
             xFloorCord += backgImage.Width;
-            
+            DrawZetCount(graphics);
             graphics.DrawImage(zet.ZetImage,zet.x,zet.y);
             graphics.DrawImage(player.PlayerImage, player.x, player.y);
             foreach (var trouble in Troubles)
@@ -195,7 +206,7 @@ namespace MMGame
             {
                 var g = args.Graphics;
 
-                if (player.ZetCount == winZetAmount - 1) floorSpeed = 7;
+                if (player.ZetCount == winZetAmount - 1 && winZetAmount != 2) floorSpeed = 7;
                 else if (player.ZetCount >= winZetAmount / 2) floorSpeed = 5;
 
                 if (newGame)
@@ -218,6 +229,7 @@ namespace MMGame
                         else
                         {
                             DrawBackground(g);
+                            DrawZetCount(g);
                             GenerateTroubles();
                             GenerateZet();
                             g.DrawImage(zet.ZetImage,zet.x,zet.y);
