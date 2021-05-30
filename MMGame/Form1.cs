@@ -13,96 +13,96 @@ namespace MMGame
 {
     public partial class Form1 : Form
     {
-        Player player;
+        Player _player;
         public List<ITrouble> Troubles;
-        public static Bitmap backgImage;
-        public static Bitmap floorImage;
-        public static Bitmap backgImage2;
-        public static Bitmap floorImage2;
-        public static Bitmap menuImage;
-        public static Bitmap playerDeadImage;
-        public static Image pauseImage;
-        public static Bitmap winGameImage;
-        public static Bitmap zetCountImage;
-        public int xFloorCord;
-        public int floorSpeed;
+        public static Bitmap BackgImage;
+        public static Bitmap FloorImage;
+        public static Bitmap BackgImage2;
+        public static Bitmap FloorImage2;
+        public static Bitmap MenuImage;
+        public static Bitmap PlayerDeadImage;
+        public static Image PauseImage;
+        public static Bitmap WinGameImage;
+        public static Bitmap ZetCountImage;
+        public int XFloorCord;
+        public int FloorSpeed;
         public const int width = 1500;
         public const int height = 630;
-        public bool newGame = true;
-        public bool pause = false;
-        public bool winGame = false;
+        public bool NewGame = true;
+        public bool Pause = false;
+        public bool WinGame = false;
         
         public Rectangle EzButtonBox = new Rectangle(new Point(654,191),new Size(197,81));
         public Rectangle MediumButtonBox = new Rectangle(new Point(654,289),new Size(197,81));
         public Rectangle HardButtonBox = new Rectangle(new Point(654,384),new Size(197,81));
-        public Rectangle exitButtonBox = new Rectangle(new Point(629,515),new Size(246,91));
+        public Rectangle ExitButtonBox = new Rectangle(new Point(629,515),new Size(246,91));
         
-        public Rectangle pauseMenuButtonBox = new Rectangle(new Point(576, 370), new Size(162,64));
-        public Rectangle pauseContinueButtonBox = new Rectangle(new Point(753, 369), new Size(159,65));
-        public Zet zet;
-        public Random Random = new Random();
-        public TroubleGenerator TGen = new TroubleGenerator();
-        public int winZetAmount;
+        public Rectangle PauseMenuButtonBox = new Rectangle(new Point(576, 370), new Size(162,64));
+        public Rectangle PauseContinueButtonBox = new Rectangle(new Point(753, 369), new Size(159,65));
+        public Zet Zet;
+        public readonly Random Random = new Random();
+        public readonly TroubleGenerator TroubleGen = new TroubleGenerator();
+        public int WinZetAmount;
 
         private void Init()
         {
-            Troubles = TGen.RandomTroubles();
-            player = new Player(200,300);
-            backgImage = new Bitmap(Tools.GetFullPath("Background.png"));
-            floorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
-            backgImage2 = new Bitmap(Tools.GetFullPath("Background2.png"));
-            floorImage2 = new Bitmap(Tools.GetFullPath("Floor2.png"));
-            menuImage = new Bitmap(Tools.GetFullPath("Start.png"));
-            playerDeadImage = new Bitmap(Tools.GetFullPath("PlayerDead.png"));
-            pauseImage = new Bitmap(Tools.GetFullPath("Pause.png"));
-            winGameImage = new Bitmap(Tools.GetFullPath("Win.png"));
-            zetCountImage = new Bitmap(Tools.GetFullPath("ZetCount.png"));
-            zet = new Zet(500,400);
-            xFloorCord = 0;
-            floorSpeed = 3;
-            winGame = false;
+            Troubles = TroubleGen.RandomTroubles();
+            _player = new Player(200,300);
+            BackgImage = new Bitmap(Tools.GetFullPath("Background.png"));
+            FloorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
+            BackgImage2 = new Bitmap(Tools.GetFullPath("Background2.png"));
+            FloorImage2 = new Bitmap(Tools.GetFullPath("Floor2.png"));
+            MenuImage = new Bitmap(Tools.GetFullPath("Start.png"));
+            PlayerDeadImage = new Bitmap(Tools.GetFullPath("PlayerDead.png"));
+            PauseImage = new Bitmap(Tools.GetFullPath("Pause.png"));
+            WinGameImage = new Bitmap(Tools.GetFullPath("Win.png"));
+            ZetCountImage = new Bitmap(Tools.GetFullPath("ZetCount.png"));
+            Zet = new Zet(500,400);
+            XFloorCord = 0;
+            FloorSpeed = 3;
+            WinGame = false;
         }
 
         private void DrawZetCount(Graphics graphics)
         {
-            for (var i = 0; i < player.ZetCount; i++)
+            for (var i = 0; i < _player.ZetCount; i++)
             {
-                zetCountImage.MakeTransparent(Color.White);
-                graphics.DrawImage(zetCountImage,i*zetCountImage.Width,0);
+                ZetCountImage.MakeTransparent(Color.White);
+                graphics.DrawImage(ZetCountImage,i*ZetCountImage.Width,0);
             }
         }
         
         private void DrawBackground(Graphics graphics)
         {
-            xFloorCord = xFloorCord % backgImage.Width-floorSpeed;
-            graphics.DrawImage(backgImage,xFloorCord-backgImage.Width,0);
-            graphics.DrawImage(backgImage2,xFloorCord,0);
-            graphics.DrawImage(floorImage,xFloorCord-backgImage.Width,backgImage.Height);
-            graphics.DrawImage(floorImage2,xFloorCord,backgImage.Height);
-            xFloorCord += backgImage.Width;
+            XFloorCord = XFloorCord % BackgImage.Width-FloorSpeed;
+            graphics.DrawImage(BackgImage,XFloorCord-BackgImage.Width,0);
+            graphics.DrawImage(BackgImage2,XFloorCord,0);
+            graphics.DrawImage(FloorImage,XFloorCord-BackgImage.Width,BackgImage.Height);
+            graphics.DrawImage(FloorImage2,XFloorCord,BackgImage.Height);
+            XFloorCord += BackgImage.Width;
         }
 
         private void GenerateTroubles()
         {
-            if (Troubles[^1].ImageRect.Right < width-100) Troubles.AddRange(TGen.RandomTroubles());
+            if (Troubles[^1].ImageRect.Right < width-100) Troubles.AddRange(TroubleGen.RandomTroubles());
             if (Troubles.First().ImageRect.Right < -10) Troubles.RemoveAt(0);
         }
 
         private void GenerateZet()
         {
-            zet.X -= floorSpeed;
-            if (zet.Incident(player) || zet.HitBox.Right < 0)
+            Zet.X -= FloorSpeed;
+            if (Zet.Incident(_player) || Zet.HitBox.Right < 0)
             {
-                zet.X = width + Random.Next(100,4000);
-                zet.Y = Random.Next(backgImage.Height, height - zet.ZetImage.Height);
+                Zet.X = width + Random.Next(100,4000);
+                Zet.Y = Random.Next(BackgImage.Height, height - Zet.ZetImage.Height);
             }
 
             foreach (var trouble in Troubles)
             {
-                if (zet.ImageRect.IntersectsWith(trouble.ImageRect))
+                if (Zet.ImageRect.IntersectsWith(trouble.ImageRect))
                 {
-                    zet.X = width;
-                    zet.Y = Random.Next(backgImage.Height, height - zet.ZetImage.Height);
+                    Zet.X = width;
+                    Zet.Y = Random.Next(BackgImage.Height, height - Zet.ZetImage.Height);
                 }
             }
         }
@@ -111,37 +111,37 @@ namespace MMGame
         {
             foreach (var trouble in Troubles)
             {
-                trouble.X -= floorSpeed;
+                trouble.X -= FloorSpeed;
                 trouble.TroubleImage.MakeTransparent(Color.White);
                 graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
-                if (!player.imageRect.IntersectsWith(trouble.ImageRect) ||
-                    player.HitBox.Top <= trouble.HitBox.Top) continue;
+                if (!_player.imageRect.IntersectsWith(trouble.ImageRect) ||
+                    _player.HitBox.Top <= trouble.HitBox.Top) continue;
                 graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
-                graphics.DrawImage(player.PlayerImage,player.x,player.y);
+                graphics.DrawImage(_player.PlayerImage,_player.x,_player.y);
             }
         }
 
         private void DrawPause(Graphics graphics)
         {
-            xFloorCord = xFloorCord % backgImage.Width;
-            graphics.DrawImage(backgImage,xFloorCord-backgImage.Width,0);
-            graphics.DrawImage(backgImage2,xFloorCord,0);
-            graphics.DrawImage(floorImage,xFloorCord-backgImage.Width,backgImage.Height);
-            graphics.DrawImage(floorImage2,xFloorCord,backgImage.Height);
-            xFloorCord += backgImage.Width;
+            XFloorCord = XFloorCord % BackgImage.Width;
+            graphics.DrawImage(BackgImage,XFloorCord-BackgImage.Width,0);
+            graphics.DrawImage(BackgImage2,XFloorCord,0);
+            graphics.DrawImage(FloorImage,XFloorCord-BackgImage.Width,BackgImage.Height);
+            graphics.DrawImage(FloorImage2,XFloorCord,BackgImage.Height);
+            XFloorCord += BackgImage.Width;
             DrawZetCount(graphics);
-            graphics.DrawImage(zet.ZetImage,zet.x,zet.y);
-            graphics.DrawImage(player.PlayerImage, player.x, player.y);
+            graphics.DrawImage(Zet.ZetImage,Zet.x,Zet.y);
+            graphics.DrawImage(_player.PlayerImage, _player.x, _player.y);
             foreach (var trouble in Troubles)
             {
                 graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
-                if (player.imageRect.IntersectsWith(trouble.ImageRect) && player.HitBox.Top > trouble.HitBox.Top)
+                if (_player.imageRect.IntersectsWith(trouble.ImageRect) && _player.HitBox.Top > trouble.HitBox.Top)
                 {
                     graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
-                    graphics.DrawImage(player.PlayerImage,player.x,player.y);
+                    graphics.DrawImage(_player.PlayerImage,_player.x,_player.y);
                 }
             }
-            graphics.DrawImage(pauseImage,0,0);
+            graphics.DrawImage(PauseImage,0,0);
         }
 
         public Form1()
@@ -156,49 +156,49 @@ namespace MMGame
             
             MouseClick += (sender, args) =>
             {
-                if (EzButtonBox.Contains(args.Location) && newGame)
+                if (EzButtonBox.Contains(args.Location) && NewGame)
                 {
                     Init();
-                    winZetAmount = 2;
-                    newGame = false;
+                    WinZetAmount = 2;
+                    NewGame = false;
                 }
                 
-                if (MediumButtonBox.Contains(args.Location) && newGame)
+                if (MediumButtonBox.Contains(args.Location) && NewGame)
                 {
                     Init();
-                    winZetAmount = 5;
-                    newGame = false;
+                    WinZetAmount = 5;
+                    NewGame = false;
                 }
                 
-                if (HardButtonBox.Contains(args.Location) && newGame)
+                if (HardButtonBox.Contains(args.Location) && NewGame)
                 {
                     Init();
-                    winZetAmount = 10;
-                    newGame = false;
+                    WinZetAmount = 10;
+                    NewGame = false;
                 }
                 
-                if (exitButtonBox.Contains(args.Location) && newGame)
+                if (ExitButtonBox.Contains(args.Location) && NewGame)
                 {
                     Application.Exit();
                 }
                 
-                if (pause)
+                if (Pause)
                 {
-                    if (pauseMenuButtonBox.Contains(args.Location))
+                    if (PauseMenuButtonBox.Contains(args.Location))
                     {
-                        newGame = true;
-                        pause = false;
+                        NewGame = true;
+                        Pause = false;
                     }
 
-                    if (pauseContinueButtonBox.Contains(args.Location))
+                    if (PauseContinueButtonBox.Contains(args.Location))
                     {
-                        pause = false;
+                        Pause = false;
                     }
                 }
                 
-                if (!player.IsAlive || winGame)
+                if (!_player.IsAlive || WinGame)
                 {
-                    newGame = true;
+                    NewGame = true;
                 }
             };
             
@@ -206,23 +206,23 @@ namespace MMGame
             {
                 var g = args.Graphics;
 
-                if (player.ZetCount == winZetAmount - 1 && winZetAmount != 2) floorSpeed = 7;
-                else if (player.ZetCount >= winZetAmount / 2) floorSpeed = 5;
+                if (_player.ZetCount == WinZetAmount - 1 && WinZetAmount != 2) FloorSpeed = 7;
+                else if (_player.ZetCount >= WinZetAmount / 2) FloorSpeed = 5;
 
-                if (newGame)
+                if (NewGame)
                 {
-                    g.DrawImage(menuImage,0,0);
+                    g.DrawImage(MenuImage,0,0);
                 }
-                else if (player.ZetCount == winZetAmount)
+                else if (_player.ZetCount == WinZetAmount)
                 {
-                    g.DrawImage(winGameImage,0,0);
-                    winGame = true;
+                    g.DrawImage(WinGameImage,0,0);
+                    WinGame = true;
                 }
                 else
                 {
-                    if (player.IsAlive)
+                    if (_player.IsAlive)
                     {
-                        if (pause)
+                        if (Pause)
                         {
                             DrawPause(g);
                         }
@@ -232,17 +232,17 @@ namespace MMGame
                             DrawZetCount(g);
                             GenerateTroubles();
                             GenerateZet();
-                            g.DrawImage(zet.ZetImage,zet.x,zet.y);
-                            g.DrawImage(player.PlayerImage, player.x, player.y);
+                            g.DrawImage(Zet.ZetImage,Zet.x,Zet.y);
+                            g.DrawImage(_player.PlayerImage, _player.x, _player.y);
                             DrawTroubles(g);
                         }
                     }
                     else
                     {
-                        g.DrawImage(playerDeadImage, 0, 0);
+                        g.DrawImage(PlayerDeadImage, 0, 0);
                     }
                 }
-                foreach (var trouble in Troubles) player.Incident(trouble);
+                foreach (var trouble in Troubles) _player.Incident(trouble);
                 Invalidate();
             };
             
@@ -250,9 +250,9 @@ namespace MMGame
             {
                 if (args.KeyCode == Keys.Escape)
                 {
-                    pause = !pause;
+                    Pause = !Pause;
                 }
-                if (player.IsAlive && !pause) player.Move(args.KeyCode.ToString(), width, height, floorImage.Height);
+                if (_player.IsAlive && !Pause) _player.Move(args.KeyCode.ToString(), width, height, FloorImage.Height);
             };
         }
     }
