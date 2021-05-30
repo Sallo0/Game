@@ -17,6 +17,54 @@
       <Resource Include="image\Player.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="image\Background2.png" />
+      <Resource Include="image\Background2.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\Floor.png" />
+      <Resource Include="image\Floor.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\Floor2.png" />
+      <Resource Include="image\Floor2.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\Pause.png" />
+      <Resource Include="image\Pause.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\PlayerDead.png" />
+      <Resource Include="image\PlayerDead.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\Start.png" />
+      <Resource Include="image\Start.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\TroubleBench.png" />
+      <Resource Include="image\TroubleBench.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\TroubleChair.png" />
+      <Resource Include="image\TroubleChair.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\TroubleComp.png" />
+      <Resource Include="image\TroubleComp.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\TroubleLava.png" />
+      <Resource Include="image\TroubleLava.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\Win.png" />
+      <Resource Include="image\Win.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="image\Zet.png" />
+      <Resource Include="image\Zet.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
     <ItemGroup>

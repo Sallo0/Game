@@ -29,8 +29,8 @@ namespace MMGame
 
         public Rectangle ImageRect
         {
-            get=> hitBox;
-            set => hitBox = value;
+            get=> imageRect;
+            set => imageRect = value;
         }
         private Rectangle imageRect;
 
@@ -83,8 +83,8 @@ namespace MMGame
         
         public Rectangle ImageRect
         {
-            get=> hitBox;
-            set => hitBox = value;
+            get=> imageRect;
+            set => imageRect = value;
         }
         private Rectangle imageRect;
         
@@ -135,8 +135,8 @@ namespace MMGame
         
         public Rectangle ImageRect
         {
-            get=> hitBox;
-            set => hitBox = value;
+            get=> imageRect;
+            set => imageRect = value;
         }
         private Rectangle imageRect;
         
@@ -187,8 +187,8 @@ namespace MMGame
         
         public Rectangle ImageRect
         {
-            get=> hitBox;
-            set => hitBox = value;
+            get=> imageRect;
+            set => imageRect = value;
         }
         private Rectangle imageRect;
         
@@ -220,6 +220,55 @@ namespace MMGame
                 y = value;
                 imageRect.Y = value;
                 hitBox.Y = value + TroubleImage.Height;
+            }
+        }
+    }
+
+    public class TroubleEmpty : ITrouble
+    {
+        private int x;
+        private int y;
+        public Bitmap TroubleImage { get; set; }
+        public Rectangle HitBox
+        {
+            get=> hitBox;
+            set => hitBox = value;
+        }
+        private Rectangle hitBox;
+        
+        public Rectangle ImageRect
+        {
+            get=> imageRect;
+            set => imageRect= value;
+        }
+        private Rectangle imageRect;
+        
+        public TroubleEmpty(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+            TroubleImage =new Bitmap( Tools.GetFullPath("Empty.png"));
+            imageRect = new Rectangle(x, y, TroubleImage.Width, TroubleImage.Height);
+            hitBox = new Rectangle(0, 1000, 1, 1);
+        }
+        
+        public int X
+        {
+            get => x;
+            set
+            {
+                x = value;
+                imageRect.X = value;
+            }
+        }
+
+        public int Y
+        {
+            get => y;
+            set
+            {
+                y = value;
+                imageRect.Y = value;
             }
         }
     }
