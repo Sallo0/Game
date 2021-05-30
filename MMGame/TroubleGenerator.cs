@@ -85,8 +85,14 @@ namespace MMGame
         {
             return new List<ITrouble>()
             {
-                new TroubleWires(StartPosition,330),
-                new TroubleWires(StartPosition+300, 500)
+                new TroubleWires(StartPosition,340),
+                new TroubleWires(StartPosition + 481,340),
+                new TroubleChair(StartPosition+200,400),
+                new TroubleChair(StartPosition+500,400),
+                new TroubleChair(StartPosition+700,400),
+                new TroubleWires(StartPosition, 550),
+                new TroubleWires(StartPosition + 481,550),
+                new TroubleEmpty(StartPosition + 481 + TWires.ImageRect.Width,0)
             };
         }
 
@@ -94,13 +100,14 @@ namespace MMGame
         public List<ITrouble> RandomTroubles()
         {
             var random = new Random();
-            return random.Next(0,5) switch
+            return random.Next(0,6) switch
             {
                 0 => ChairButterfly(),
                 1 => LChar(),
                 2 => OChar(),
                 3 => HChar(),
                 4 => Lava(),
+                5 => Wires(),
                 _ => new List<ITrouble>()
             };
         }
