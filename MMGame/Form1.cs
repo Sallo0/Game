@@ -30,8 +30,12 @@ namespace MMGame
         public bool newGame = true;
         public bool pause = false;
         public bool winGame = false;
-        public Rectangle startButtonBox = new Rectangle(new Point(656,397),new Size(197,81));
-        public Rectangle exitButtonBox = new Rectangle(new Point(656,494),new Size(197,81));
+        
+        public Rectangle EzButtonBox = new Rectangle(new Point(654,191),new Size(197,81));
+        public Rectangle MediumButtonBox = new Rectangle(new Point(654,289),new Size(197,81));
+        public Rectangle HardButtonBox = new Rectangle(new Point(654,384),new Size(197,81));
+        public Rectangle exitButtonBox = new Rectangle(new Point(629,515),new Size(246,91));
+        
         public Rectangle pauseMenuButtonBox = new Rectangle(new Point(576, 370), new Size(162,64));
         public Rectangle pauseContinueButtonBox = new Rectangle(new Point(753, 369), new Size(159,65));
         public Zet zet;
@@ -55,7 +59,6 @@ namespace MMGame
             xFloorCord = 0;
             floorSpeed = 3;
             winGame = false;
-            winZetAmount = 5;
         }
         
         private void DrawBackground(Graphics graphics)
@@ -100,7 +103,6 @@ namespace MMGame
                 trouble.X -= floorSpeed;
                 trouble.TroubleImage.MakeTransparent(Color.White);
                 graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
-                //graphics.DrawRectangle(new Pen(Color.Brown),trouble.HitBox);
                 if (!player.imageRect.IntersectsWith(trouble.ImageRect) ||
                     player.HitBox.Top <= trouble.HitBox.Top) continue;
                 graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
@@ -143,9 +145,24 @@ namespace MMGame
             
             MouseClick += (sender, args) =>
             {
-                if (startButtonBox.Contains(args.Location) && newGame)
+                if (EzButtonBox.Contains(args.Location) && newGame)
                 {
                     Init();
+                    winZetAmount = 2;
+                    newGame = false;
+                }
+                
+                if (MediumButtonBox.Contains(args.Location) && newGame)
+                {
+                    Init();
+                    winZetAmount = 5;
+                    newGame = false;
+                }
+                
+                if (HardButtonBox.Contains(args.Location) && newGame)
+                {
+                    Init();
+                    winZetAmount = 10;
                     newGame = false;
                 }
                 
