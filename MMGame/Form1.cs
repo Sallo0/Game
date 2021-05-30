@@ -45,7 +45,7 @@ namespace MMGame
 
         private void Init()
         {
-            Troubles = TGen.Lava();
+            Troubles = TGen.RandomTroubles();
             player = new Player(200,300);
             backgImage = new Bitmap(Tools.GetFullPath("Background.png"));
             floorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
