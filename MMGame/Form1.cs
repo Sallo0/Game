@@ -41,7 +41,7 @@ namespace MMGame
 
         private void Init()
         {
-            Troubles = TGen.RandomTroubles();
+            Troubles = TGen.Lava();
             player = new Player(200,300);
             backgImage = new Bitmap(Tools.GetFullPath("Background.png"));
             floorImage = new Bitmap(Tools.GetFullPath("Floor.png"));
@@ -70,8 +70,8 @@ namespace MMGame
 
         private void GenerateTroubles()
         {
-            if (Troubles.Last().HitBox.Right < width-100) Troubles.AddRange(TGen.RandomTroubles());
-            if (Troubles.First().HitBox.Right < -10) Troubles.RemoveAt(0);
+            if (Troubles[^1].ImageRect.Right < width-100) Troubles.AddRange(TGen.RandomTroubles());
+            if (Troubles.First().ImageRect.Right < -10) Troubles.RemoveAt(0);
         }
 
         private void GenerateZet()
@@ -98,6 +98,7 @@ namespace MMGame
             foreach (var trouble in Troubles)
             {
                 trouble.X -= floorSpeed;
+                trouble.TroubleImage.MakeTransparent(Color.White);
                 graphics.DrawImage(trouble.TroubleImage,trouble.X,trouble.Y);
                 //graphics.DrawRectangle(new Pen(Color.Brown),trouble.HitBox);
                 if (!player.imageRect.IntersectsWith(trouble.ImageRect) ||
@@ -176,6 +177,10 @@ namespace MMGame
             Paint += (sender, args) =>
             {
                 var g = args.Graphics;
+
+                if (player.ZetCount == winZetAmount - 1) floorSpeed = 7;
+                else if (player.ZetCount >= winZetAmount / 2) floorSpeed = 5;
+
                 if (newGame)
                 {
                     g.DrawImage(menuImage,0,0);
